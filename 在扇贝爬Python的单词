@@ -1,0 +1,21 @@
+from urllib import request,parse
+from lxml import etree
+def sbei(n):
+    url = "https://www.shanbay.com/wordlist/189943/551617/?page=%s"%n
+    a = request.urlopen(url)
+    b = a.read()
+    html = etree.HTML(b)
+    c = html.xpath('//tr[@class="row"]')
+    word = {}
+    for k in c:
+        a = k.xpath('.//strong')[0].text.strip() #strip是把找到的内容去掉空格
+        b = k.xpath('./td[@class="span10"]')[0].text.strip()
+        if len(a)!=0 and len(b)!=0:
+            word[a] = b
+    for k,v in word.items():
+        print(k,":",v)
+        print(' ')
+
+if __name__ == '__main__':
+    for i in range(10):
+        sbei(i)
