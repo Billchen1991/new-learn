@@ -1,0 +1,36 @@
+from urllib import request
+from bs4 import BeautifulSoup
+urls = []
+def qq():
+    url = "https://hr.tencent.com/position.php?keywords=python&lid=2196&tid=87"
+    a = request.urlopen(url)
+    b = a.read()
+    soup = BeautifulSoup(b,'lxml')
+    tr1 = soup.select("tr[class='even']")
+    tr2 = soup.select("tr[class='odd']")
+    tr = tr1 + tr2
+    print('找到的职位列表如下：')
+    for k in tr:
+        name = k.select('td a')[0].get_text()
+        href = k.select('td a')[0].attrs['href']
+        leixing = k.select('td')[1].get_text()
+        addr = k.select('td')[3].get_text()
+        urls.append('https://hr.tencent.com/'+href)
+        print(name)
+    print('*'*20)
+
+def zpxq():
+    print('找到的职位详情如下：')
+    for url in urls:
+        a = request.urlopen(url)
+        b = a.read()
+        soup = BeautifulSoup(b,'lxml')
+        tr = soup.select("tr")
+        for k in tr:
+            name = k.select("td")[0].get_text()
+            print(name)
+        print('=='*15)
+
+if __name__ == '__main__':
+    qq()
+    zpxq()
