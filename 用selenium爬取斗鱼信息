@@ -1,0 +1,28 @@
+from bs4 import  BeautifulSoup
+from selenium import webdriver
+
+class Dyu():
+    def setUp(self):
+        self.driver = webdriver.Chrome()
+        self.url = "https://www.douyu.com/directory/all"
+
+    def douyu(self):
+        self.driver.get(self.url)
+        while True:
+            soup = BeautifulSoup(self.driver.page_source,'xml')
+            titles = soup.find_all('h3',{'class':"ellipsis"})
+            num = soup.find_all('span',{'class':"dy-num fr"})
+            t = 1
+            d = {}
+            for k,v in zip(titles,num):
+                print('第{}个房间名称：{},人数为{}'.format(t,k.get_text().strip(),v.get_text().strip()))
+                t +=1
+
+    def gb(self):
+        self.driver.quit()
+
+if __name__ == '__main__':
+    d = Dyu()
+    d.setUp()
+    d.douyu()
+    d.gb()
